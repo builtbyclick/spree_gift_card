@@ -5,7 +5,7 @@ module Spree
 
     UNACTIVATABLE_ORDER_STATES = ["complete", "awaiting_return", "returned"]
 
-    attr_accessible :email, :name, :note, :variant_id
+    attr_accessible :email, :name, :note, :variant_id, :send_at
 
     belongs_to :variant
     belongs_to :line_item
@@ -57,7 +57,11 @@ module Spree
       !UNACTIVATABLE_ORDER_STATES.include?(order.state)
     end
 
-    private
+    def email_to_recipient
+      Spree::OrderMailer.gift_card_email(id, line_item.order).deliver
+    end
+
+  private
 
     def generate_code
       until self.code.present? && self.class.where(code: self.code).count == 0
