@@ -58,7 +58,7 @@ module Spree
     end
 
     def email_to_recipient
-      Spree::OrderMailer.gift_card_email(id, line_item.order).deliver
+      Spree::OrderMailer.gift_card_email(id, line_item.order.id).deliver
       update_attribute('send_at', Time.now)
     end
 
