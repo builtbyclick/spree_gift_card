@@ -59,6 +59,13 @@ module Spree
 
     def email_to_recipient
       Spree::OrderMailer.gift_card_email(id, line_item.order).deliver
+      update_attribute('send_at', Time.now)
+    end
+
+    class << self
+      def awaiting_delivery
+        where(["send_at < ? AND sent_at IS NULL", Time.now])
+      end
     end
 
   private
