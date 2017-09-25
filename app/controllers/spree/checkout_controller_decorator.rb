@@ -9,7 +9,7 @@ Spree::CheckoutController.class_eval do
       end
 
       unless @order.next
-        flash[:error] = Spree.t(:payment_processing_failed)
+        flash[:error] = @order.errors.full_messages.join("\n")
         redirect_to checkout_state_path(@order.state) and return
       end
 
