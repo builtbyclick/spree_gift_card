@@ -30,6 +30,14 @@ module Spree
       order.update!
       create_adjustment(Spree.t(:gift_card), order, order, true)
       order.update!
+      update_payment_amount(order)
+      order.update!
+    end
+
+    def update_payment_amount(order)
+      payment = order.payments.with_state(:checkout).last
+      return unless payment
+      payment.update_attribute(:amount, order.total)
     end
 
     # Calculate the amount to be used when creating an adjustment
